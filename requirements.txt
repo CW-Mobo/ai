@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+tensorflow==2.20.0
+numpy
+Pillow
+pymongo
+python-dotenv
+python-multipart
+streamlit
+scikit-learn
+matplotlib
+seaborn
+pandas
+imageio
