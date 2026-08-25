@@ -139,27 +139,12 @@ Os dados são armazenados em: `ia_lichia_db` -> `analises`
 
 ---
 
-## ⚠️ Boas práticas
-
-* ❌ **Não subir:** `logs/`, `dataset/`, arquivos `.keras`
-* ✔️ Usar `.gitignore`
-* ✔️ Usar `.env` para credenciais
-
----
-
 ## 📌 Status do projeto
 
 * ✅ API funcionando
 * ✅ Integração com MongoDB Atlas
 * ✅ Modelo de IA treinado
 * 🔜 Integração com IoT (futuro)
-
----
-
-## 👩‍💻 Autores
-
-**Equipe Mobo**
-FATEC — Desenvolvimento de Software Multiplataforma
 
 ---
 
