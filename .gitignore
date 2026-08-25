@@ -1,21 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
 .venv/
 .venv_app/
-__pycache__/
-*.pyc
+venv/
+env/
+ENV/
 
-# Dados e arquivos pesados
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Logs
+logs/
+*.log
 ia_lichia/logs/
+
+# Dataset and generated data
 ia_lichia/dataset/
 ia_lichia/frames/
 frames/
 
-# Modelo treinado
+# Trained models
 *.keras
+*.h5
+*.pkl
+*.joblib
 
-# Variáveis de ambiente
-.env
+# Jupyter Notebook
+.ipynb_checkpoints/
 
-# Outros
-.streamlit/secrets.toml
+# Testing / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
 
-logs/
+# Build / Distribution
+build/
+dist/
+*.egg-info/
+
+# IDE / Editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp

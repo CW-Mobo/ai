@@ -32,14 +32,19 @@ Sistema de **Inteligência Artificial** capaz de analisar imagens de lichias e c
 ## 📂 Estrutura do projeto
 
 ```text
-ai
-├── api.py              # API principal (FastAPI)
-├── app.py              # Execução/integração
-├── requisitos.txt      # Dependências
-├── estilos.css         # Estilo frontend (se aplicável)
-├── .gitignore
-└── ia_lichia/
-    └── train.py        # Treinamento do modelo
+ai/
+├── ia_lichia/
+|   ├── organize.py
+|   └── train.py           
+├── .env.example
+├── .gitignore      
+├── api.py       
+├── app.py
+├── LICENSE
+├── logo.png
+├── README.md
+├── requirements.txt
+└── styles.css
 ```
 
 ---
