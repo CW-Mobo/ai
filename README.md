@@ -1,5 +1,6 @@
+# IA
 
-# 🍒 IA para Análise de maturação de Lichias
+## 📋 Sobre
 
 Sistema de **Inteligência Artificial** capaz de analisar imagens de lichias e classificar seu estado de maturação, integrado a uma **API em FastAPI** e persistência de dados no **MongoDB Atlas**.
 
@@ -31,14 +32,12 @@ Sistema de **Inteligência Artificial** capaz de analisar imagens de lichias e c
 ## 📂 Estrutura do projeto
 
 ```text
-IA_Analise_de_Lichia/
-│
+ai
 ├── api.py              # API principal (FastAPI)
 ├── app.py              # Execução/integração
 ├── requisitos.txt      # Dependências
 ├── estilos.css         # Estilo frontend (se aplicável)
 ├── .gitignore
-│
 └── ia_lichia/
     └── train.py        # Treinamento do modelo
 ```
@@ -50,8 +49,8 @@ IA_Analise_de_Lichia/
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/jk-ramos/IA_Analise_de_Lichia.git
-cd IA_Analise_de_Lichia
+git clone https://github.com/CW-Mobo/ai.git
+cd ai
 ```
 
 ### 2. Criar ambiente virtual
