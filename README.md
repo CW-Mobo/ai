@@ -42,8 +42,9 @@ ai/
 ├── app.py
 ├── LICENSE
 ├── logo.png
+├── pyproject.toml
 ├── README.md
-├── requirements.txt
+├── uv.lock
 └── styles.css
 ```
 
@@ -58,23 +59,13 @@ git clone https://github.com/CW-Mobo/ai.git
 cd ai
 ```
 
-### 2. Criar ambiente virtual
+### 2. Instalar dependências
 
 ```bash
-python -m venv .venv
-
-# Linux/Mac
-source .venv/bin/activate  
-
-# Windows
-.venv\Scripts\activate
+uv sync
 ```
 
-### 3. Instalar dependências
-
-```bash
-pip install -r requirements.txt
-```
+O `uv` cria o ambiente virtual em `.venv` e instala as versões registradas em `uv.lock`.
 
 ### 4. Configurar MongoDB Atlas
 
@@ -89,7 +80,13 @@ MongoClient("mongodb+srv://USUARIO:SENHA@cluster.mongodb.net/")
 ### 5. Rodar a API
 
 ```bash
-uvicorn api:app --reload
+uv run uvicorn api:app --reload
+```
+
+Para iniciar a interface Streamlit:
+
+```bash
+uv run streamlit run app.py
 ```
 
 ---

@@ -1,0 +1,25 @@
+[project]
+name = "ia-lichia"
+version = "0.1.0"
+description = "Análise e classificação de imagens de lichias"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "tensorflow==2.20.0",
+    "numpy",
+    "pillow",
+    "pymongo",
+    "python-dotenv",
+    "python-multipart",
+    "streamlit",
+    "scikit-learn",
+    "matplotlib",
+    "seaborn",
+    "pandas",
+    "imageio",
+]
+
+[tool.uv]
+package = false
