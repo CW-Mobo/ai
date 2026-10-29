@@ -1,6 +1,9 @@
 import os
 import shutil
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATASET_DIR = os.path.join(BASE_DIR, "dataset")
+
 classes = {
     "0": "nao_madura",
     "1": None,  # classe "ignorado" para IDs desconhecidos
@@ -10,11 +13,11 @@ classes = {
 splits = ["train", "val", "test"]
 
 for split in splits:
-    images_dir = os.path.join("dataset", split, "images")
-    labels_dir = os.path.join("dataset", split, "labels")
+    images_dir = os.path.join(DATASET_DIR, split, "images")
+    labels_dir = os.path.join(DATASET_DIR, split, "labels")
 
     if not os.path.exists(labels_dir):
-        labels_dir = os.path.join("dataset", split, "label")  # tenta singular
+        labels_dir = os.path.join(DATASET_DIR, split, "label")  # tenta singular
 
     contadores = {"madura": 0, "nao_madura": 0, "ignorado": 0}
 
@@ -47,7 +50,7 @@ for split in splits:
             contadores["ignorado"] += 1
             continue
 
-        dest_dir = os.path.join("dataset", split, class_name)
+        dest_dir = os.path.join(DATASET_DIR, split, class_name)
         os.makedirs(dest_dir, exist_ok=True)
         shutil.copy2(image_path, os.path.join(dest_dir, os.path.basename(image_path)))
         contadores[class_name] += 1

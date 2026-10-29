@@ -16,11 +16,13 @@ from sklearn.utils.class_weight import compute_class_weight
 IMG_HEIGHT, IMG_WIDTH = 224, 224
 BATCH_SIZE = 32
 EPOCHS = 20
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATASET_DIR = os.path.join(BASE_DIR, "dataset")
 
 # Pasta de logs e frames
 run_name = datetime.now().strftime("%Y%m%d-%H%M%S")
-log_dir = os.path.join("logs", run_name)
-frames_dir = os.path.join("frames", run_name)
+log_dir = os.path.join(BASE_DIR, "logs", run_name)
+frames_dir = os.path.join(BASE_DIR, "frames", run_name)
 
 os.makedirs(log_dir, exist_ok=True)
 os.makedirs(frames_dir, exist_ok=True)
@@ -46,7 +48,7 @@ val_test_datagen = ImageDataGenerator(rescale=1.0 / 255)
 
 # Data generators
 train_generator = train_datagen.flow_from_directory(
-    "dataset/train",
+    os.path.join(DATASET_DIR, "train"),
     target_size=(IMG_HEIGHT, IMG_WIDTH),
     batch_size=BATCH_SIZE,
     class_mode="binary",
@@ -54,7 +56,7 @@ train_generator = train_datagen.flow_from_directory(
 )
 
 validation_generator = val_test_datagen.flow_from_directory(
-    "dataset/val",
+    os.path.join(DATASET_DIR, "val"),
     target_size=(IMG_HEIGHT, IMG_WIDTH),
     batch_size=BATCH_SIZE,
     class_mode="binary",
@@ -62,7 +64,7 @@ validation_generator = val_test_datagen.flow_from_directory(
 )
 
 test_generator = val_test_datagen.flow_from_directory(
-    "dataset/test",
+    os.path.join(DATASET_DIR, "test"),
     target_size=(IMG_HEIGHT, IMG_WIDTH),
     batch_size=BATCH_SIZE,
     class_mode="binary",
@@ -339,7 +341,7 @@ plt.show()
 
 print(f"\nMatriz de confusão salva em: {cm_png_path}")
 
-model.save("modelo_lichia.keras")
+model.save(os.path.join(BASE_DIR, "modelo_lichia.keras"))
 
 print(f"\nLogs do TensorBoard salvos em: {log_dir}")
 print(f"Frames salvos em: {frames_dir}")

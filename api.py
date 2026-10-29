@@ -30,14 +30,18 @@ if not MONGO_URI:
 
 client = MongoClient(MONGO_URI)
 
-db = client["ia_lichia_db"]
+db = client["mobo"]
 analises_collection = db["analises"]
 
 
 # -----------------------------
 # CARREGAR MODELO
 # -----------------------------
-MODEL_PATH = "ia_lichia/modelo_lichia.keras"
+MODEL_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)),
+    "treinamento",
+    "modelo_lichia.keras",
+)
 model = tf.keras.models.load_model(MODEL_PATH)
 
 

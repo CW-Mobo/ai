@@ -21,11 +21,11 @@ ENV/
 # Logs
 logs/
 *.log
-ia_lichia/logs/
+treinamento/logs/
 
 # Dataset and generated data
-ia_lichia/dataset/
-ia_lichia/frames/
+treinamento/dataset/
+treinamento/frames/
 frames/
 
 # Trained models
