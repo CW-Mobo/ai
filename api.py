@@ -1,5 +1,7 @@
 import os
 import io
+import base64
+import binascii
 from datetime import datetime
 
 import numpy as np
@@ -8,11 +10,19 @@ from dotenv import load_dotenv
 from PIL import Image
 from pymongo import MongoClient
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query
+from pydantic import BaseModel
 
 
 load_dotenv()
 
 app = FastAPI()
+
+
+class CameraFrameRequest(BaseModel):
+    image_base64: str
+    mime_type: str = "image/jpeg"
+    file_name: str = "camera.jpg"
+    save_result: bool = False
 
 MAX_DISPLAY_CONFIDENCE_PERCENT = 98.2
 
@@ -39,7 +49,7 @@ analises_collection = db["analises"]
 # -----------------------------
 MODEL_PATH = os.path.join(
     os.path.dirname(os.path.abspath(__file__)),
-    "treinamento",
+    "model",
     "modelo_lichia.keras",
 )
 model = tf.keras.models.load_model(MODEL_PATH)
@@ -246,3 +256,68 @@ async def predict(file: UploadFile = File(...)):
             status_code=500,
             detail=f"Erro interno ao processar a imagem: {str(e)}"
         )
+
+
+@app.post("/predict-frame")
+def predict_frame(frame: CameraFrameRequest):
+    """Analisa um quadro JPEG/PNG recebido pelo WebSocket da câmera no mobile."""
+    if frame.mime_type not in ["image/jpeg", "image/png", "image/jpg"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Formato inválido. Envie um quadro JPG, JPEG ou PNG."
+        )
+
+    if len(frame.image_base64) > 12 * 1024 * 1024:
+        raise HTTPException(
+            status_code=413,
+            detail="A imagem deve ter no máximo 8 MB."
+        )
+
+    try:
+        image_bytes = base64.b64decode(frame.image_base64, validate=True)
+        if not image_bytes or len(image_bytes) > 8 * 1024 * 1024:
+            raise HTTPException(
+                status_code=413,
+                detail="A imagem deve ter no máximo 8 MB."
+            )
+
+        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        predicted_class, confidence = predict_image(image)
+
+        data_analise = datetime.now()
+        resultado = {
+            "nome_arquivo": os.path.basename(frame.file_name)[:120],
+            "classe_prevista": predicted_class,
+            "confianca": round(confidence * 100, 2),
+            "data_analise": data_analise
+        }
+        display_confidence = round(
+            limit_display_confidence(resultado["confianca"]), 2
+        )
+
+        response = {
+            "classe_prevista": resultado["classe_prevista"],
+            "confianca": display_confidence,
+            "nome_arquivo": resultado["nome_arquivo"],
+            "data_analise": data_analise.isoformat(),
+            "mensagem": "Quadro analisado com sucesso"
+        }
+
+        if frame.save_result:
+            insert_result = analises_collection.insert_one(resultado)
+            response["id"] = str(insert_result.inserted_id)
+            response["mensagem"] = "Análise salva no MongoDB Atlas com sucesso"
+
+        return response
+    except HTTPException:
+        raise
+    except (binascii.Error, ValueError) as error:
+        raise HTTPException(
+            status_code=400,
+            detail="O quadro enviado não contém uma imagem base64 válida."
+        ) from error
+    except Exception as error:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Erro interno ao processar o quadro: {str(error)}"
+        ) from error

@@ -16,19 +16,32 @@ from sklearn.utils.class_weight import compute_class_weight
 IMG_HEIGHT, IMG_WIDTH = 224, 224
 BATCH_SIZE = 32
 EPOCHS = 20
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Diretório raiz da IA
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Diretórios principais
 DATASET_DIR = os.path.join(BASE_DIR, "dataset")
+MODEL_DIR = os.path.join(BASE_DIR, "model")
+LOGS_DIR = os.path.join(BASE_DIR, "logs")
+FRAMES_DIR = os.path.join(BASE_DIR, "frames")
 
-# Pasta de logs e frames
-run_name = datetime.now().strftime("%Y%m%d-%H%M%S")
-log_dir = os.path.join(BASE_DIR, "logs", run_name)
-frames_dir = os.path.join(BASE_DIR, "frames", run_name)
+# Identificador da execução
+RUN_NAME = datetime.now().strftime("%Y%m%d-%H%M%S")
 
-os.makedirs(log_dir, exist_ok=True)
-os.makedirs(frames_dir, exist_ok=True)
+# Diretórios específicos da execução
+LOG_DIR = os.path.join(LOGS_DIR, RUN_NAME)
+FRAMES_RUN_DIR = os.path.join(FRAMES_DIR, RUN_NAME)
+
+# Criação automática das pastas
+for directory in [MODEL_DIR, LOG_DIR, FRAMES_RUN_DIR]:
+    os.makedirs(directory, exist_ok=True)
+
+os.makedirs(LOG_DIR, exist_ok=True)
+os.makedirs(FRAMES_RUN_DIR, exist_ok=True)
 
 tensorboard_callback = tf.keras.callbacks.TensorBoard(
-    log_dir=log_dir,
+    log_dir=LOG_DIR,
     histogram_freq=1
 )
 
@@ -215,8 +228,8 @@ class PredictionVideoLoggerCallback(tf.keras.callbacks.Callback):
 
 prediction_video_logger_callback = PredictionVideoLoggerCallback(
     val_generator=validation_generator,
-    log_directory=log_dir,
-    frames_directory=frames_dir,
+    log_directory=LOG_DIR,
+    frames_directory=FRAMES_RUN_DIR,
     index_to_class=index_to_class,
     max_images=4
 )
@@ -335,16 +348,16 @@ plt.xlabel("Predito", fontsize=12)
 plt.ylabel("Real", fontsize=12)
 plt.tight_layout()
 
-cm_png_path = os.path.join(log_dir, "matriz_confusao.png")
+cm_png_path = os.path.join(LOG_DIR, "matriz_confusao.png")
 plt.savefig(cm_png_path, dpi=300, bbox_inches="tight")
 plt.show()
 
 print(f"\nMatriz de confusão salva em: {cm_png_path}")
 
-model.save(os.path.join(BASE_DIR, "modelo_lichia.keras"))
+model.save(os.path.join(MODEL_DIR, "modelo_lichia.keras"))
 
-print(f"\nLogs do TensorBoard salvos em: {log_dir}")
-print(f"Frames salvos em: {frames_dir}")
+print(f"\nLogs do TensorBoard salvos em: {LOG_DIR}")
+print(f"Frames salvos em: {FRAMES_RUN_DIR}")
 print(f"Classes detectadas: {class_indices}")
 
 # -----------------------------
@@ -364,7 +377,7 @@ plt.grid(True, linestyle="--", alpha=0.5)
 plt.legend()
 plt.tight_layout()
 
-acc_png_path = os.path.join(log_dir, "grafico_acuracia.png")
+acc_png_path = os.path.join(LOG_DIR, "grafico_acuracia.png")
 plt.savefig(acc_png_path, dpi=300, bbox_inches="tight")
 plt.show()
 
@@ -379,7 +392,7 @@ plt.grid(True, linestyle="--", alpha=0.5)
 plt.legend()
 plt.tight_layout()
 
-loss_png_path = os.path.join(log_dir, "grafico_perda.png")
+loss_png_path = os.path.join(LOG_DIR, "grafico_perda.png")
 plt.savefig(loss_png_path, dpi=300, bbox_inches="tight")
 plt.show()
 
@@ -428,7 +441,7 @@ metrics_df = pd.DataFrame({
 print("\nTabela de métricas:")
 print(metrics_df.to_string(index=False))
 
-metrics_csv_path = os.path.join(log_dir, "tabela_metricas.csv")
+metrics_csv_path = os.path.join(LOG_DIR, "tabela_metricas.csv")
 metrics_df.to_csv(metrics_csv_path, index=False, encoding="utf-8-sig")
 
 print(f"\nTabela de métricas salva em: {metrics_csv_path}")

@@ -126,16 +126,16 @@ uv run python treinamento/train.py
 Ao terminar sem erros, o arquivo será criado em:
 
 ```text
-treinamento/modelo_lichia.keras
+model/modelo_lichia.keras
 ```
 
 Confira se ele existe antes de iniciar a API:
 
 ```powershell
-Test-Path treinamento\modelo_lichia.keras
+Test-Path model\modelo_lichia.keras
 ```
 
-O resultado deve ser `True`. O GitHub não fornece esse arquivo: modelos `.keras` são ignorados pelo `.gitignore`. Se a equipe já tiver um modelo treinado, copie-o para `treinamento/modelo_lichia.keras` e pule o treinamento.
+O resultado deve ser `True`. O GitHub não fornece esse arquivo: modelos `.keras` são ignorados pelo `.gitignore`. Se a equipe já tiver um modelo treinado, copie-o para `model/modelo_lichia.keras` e pule o treinamento.
 
 ### 4. Configurar o MongoDB Atlas
 
@@ -172,13 +172,13 @@ Em outro terminal, também na pasta `ai`, execute:
 uv run streamlit run app.py
 ```
 
-O Streamlit exibirá o endereço local do painel. O painel e a API carregam o mesmo arquivo `treinamento/modelo_lichia.keras`.
+O Streamlit exibirá o endereço local do painel. O painel e a API carregam o mesmo arquivo `model/modelo_lichia.keras`.
 
 ### Ordem resumida
 
 1. Obter o dataset e colocá-lo em `treinamento/dataset`.
 2. Preparar as classes, se os dados estiverem no formato YOLO.
-3. Treinar o modelo ou copiar o modelo já treinado para `treinamento/modelo_lichia.keras`.
+3. Treinar o modelo ou copiar o modelo já treinado para `model/modelo_lichia.keras`.
 4. Configurar o MongoDB no `.env`.
 5. Iniciar a API e o painel em terminais separados.
 
@@ -198,6 +198,21 @@ curl -X POST "http://127.0.0.1:8000/predict" \
      -H "Content-Type: multipart/form-data" \
      -F "file=@imagem.jpg"
 ```
+
+### 📷 `POST /predict-frame`
+
+Recebe um quadro de câmera em base64, usado pelo fluxo WebSocket do mobile:
+
+```json
+{
+  "image_base64": "BASE64_DO_JPEG",
+  "mime_type": "image/jpeg",
+  "file_name": "camera.jpg",
+  "save_result": false
+}
+```
+
+A rota retorna classe e confiança sem gravar cada quadro no banco por padrão. Envie `save_result: true` quando quiser guardar uma análise; imagens de até 8 MB são aceitas.
 
 ### 📥 Resposta
 

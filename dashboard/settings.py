@@ -2,8 +2,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 TRAINING_DIR = BASE_DIR / "treinamento"
+MODEL_DIR = BASE_DIR / "model"
 ASSETS_DIR = BASE_DIR / "assets"
-MODEL_PATH = TRAINING_DIR / "modelo_lichia.keras"
+MODEL_PATH = MODEL_DIR / "modelo_lichia.keras"
 LOGO_PATH = ASSETS_DIR / "logo.png"
 CSS_PATH = ASSETS_DIR / "styles.css"
 IMG_HEIGHT = 224

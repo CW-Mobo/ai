@@ -21,11 +21,9 @@ ENV/
 # Logs
 logs/
 *.log
-treinamento/logs/
 
 # Dataset and generated data
-treinamento/dataset/
-treinamento/frames/
+dataset/
 frames/
 
 # Trained models
